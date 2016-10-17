@@ -19,7 +19,7 @@ namespace ClinicaFrba.Login
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -32,8 +32,10 @@ namespace ClinicaFrba.Login
         {
             //chequearLogueo
             //mostrarOpciones 
-            this.button2.Enabled = true;
-           
+            if (this.textBox1.Text == "Martin" && this.textBox2.Text == "Salerno")
+                this.button2.Enabled = true;
+            else
+                MessageBox.Show("Verifique usuario y password");
         }
 
         private void label2_Click(object sender, EventArgs e)

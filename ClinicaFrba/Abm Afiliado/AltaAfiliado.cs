@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClinicaFrba.Abm_Profesional
+namespace ClinicaFrba.Abm_Afiliado
 {
-    public partial class Form1 : Form
+    public partial class AltaAfiliado : Form
     {
-        public Form1()
+        Abm_Afiliado.ABMAfiliado abm;
+
+        public AltaAfiliado(Abm_Afiliado.ABMAfiliado abm)
         {
+            this.abm = abm;
             InitializeComponent();
         }
     }

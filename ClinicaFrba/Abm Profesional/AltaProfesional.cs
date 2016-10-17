@@ -8,15 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClinicaFrba.Abm_Afiliado
+namespace ClinicaFrba.Abm_Profesional
 {
-    public partial class Baja : Form
+    public partial class AltaProfesional : Form
     {
-        Abm_Afiliado.ABM abm;
-
-        public Baja(Abm_Afiliado.ABM abm)
+        public AltaProfesional()
         {
-            this.abm = abm;
             InitializeComponent();
         }
     }

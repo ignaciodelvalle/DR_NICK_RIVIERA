@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace ClinicaFrba.Abm_Afiliado
 {
-    public partial class Alta : Form
+    public partial class Baja : Form
     {
-        Abm_Afiliado.ABM abm;
+        Abm_Afiliado.ABMAfiliado abm;
 
-        public Alta(Abm_Afiliado.ABM abm)
+        public Baja(Abm_Afiliado.ABMAfiliado abm)
         {
             this.abm = abm;
             InitializeComponent();

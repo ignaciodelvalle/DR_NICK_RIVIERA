@@ -12,17 +12,17 @@ namespace ClinicaFrba.Abm_Afiliado
 
 {
 
-    public partial class Modificacion : Form
+    public partial class ConsultaModificacionAfiliado : Form
     {
-        Abm_Afiliado.ABM abm;
+        Abm_Afiliado.ABMAfiliado abm;
         Principal.Afiliado modificacion;
 
-        public Modificacion(Abm_Afiliado.ABM abm)
+        public ConsultaModificacionAfiliado(Abm_Afiliado.ABMAfiliado abm)
         {
             this.abm = abm;
             InitializeComponent();
         }
-        public Modificacion(Principal.Afiliado modificacion)
+        public ConsultaModificacionAfiliado(Principal.Afiliado modificacion)
         {
             this.modificacion = modificacion;
             InitializeComponent();

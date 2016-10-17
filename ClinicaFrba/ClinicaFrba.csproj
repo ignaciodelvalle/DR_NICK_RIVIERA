@@ -44,29 +44,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abm Afiliado\ABM.cs">
+    <Compile Include="Abm Afiliado\ABMAfiliado.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Afiliado\ABM.Designer.cs">
-      <DependentUpon>ABM.cs</DependentUpon>
+    <Compile Include="Abm Afiliado\ABMAfiliado.Designer.cs">
+      <DependentUpon>ABMAfiliado.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Afiliado\Alta.cs">
+    <Compile Include="Abm Afiliado\AltaAfiliado.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Afiliado\Alta.Designer.cs">
-      <DependentUpon>Alta.cs</DependentUpon>
+    <Compile Include="Abm Afiliado\AltaAfiliado.Designer.cs">
+      <DependentUpon>AltaAfiliado.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Afiliado\Baja.cs">
+    <Compile Include="Abm Afiliado\BajaAfiliado.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Abm Afiliado\Baja.Designer.cs">
-      <DependentUpon>Baja.cs</DependentUpon>
+      <DependentUpon>BajaAfiliado.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Afiliado\Modificacion.cs">
+    <Compile Include="Abm Afiliado\ConsultaModificacionAfiliado.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Afiliado\Modificacion.Designer.cs">
-      <DependentUpon>Modificacion.cs</DependentUpon>
+    <Compile Include="Abm Afiliado\ConsultaModificacionAfiliado.Designer.cs">
+      <DependentUpon>ConsultaModificacionAfiliado.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Especialidades Medicas\Form1.cs">
       <SubType>Form</SubType>
@@ -80,11 +80,29 @@
     <Compile Include="Abm Planes\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Profesional\Form1.cs">
+    <Compile Include="Abm Profesional\ABMProfesional.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Profesional\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Abm Profesional\ABMProfesional.Designer.cs">
+      <DependentUpon>ABMProfesional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Profesional\AltaProfesional.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Profesional\AltaProfesional.Designer.cs">
+      <DependentUpon>AltaProfesional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Profesional\BajaProfesional.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Profesional\BajaProfesional.Designer.cs">
+      <DependentUpon>BajaProfesional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Abm Profesional\ConsultaModificacionProfesional.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Profesional\ConsultaModificacionProfesional.Designer.cs">
+      <DependentUpon>ConsultaModificacionProfesional.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmRol\Form1.cs">
       <SubType>Form</SubType>
@@ -166,14 +184,20 @@
     <Compile Include="Registro Resultado\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Abm Afiliado\ABM.resx">
-      <DependentUpon>ABM.cs</DependentUpon>
+    <EmbeddedResource Include="Abm Afiliado\ABMAfiliado.resx">
+      <DependentUpon>ABMAfiliado.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Abm Afiliado\Alta.resx">
-      <DependentUpon>Alta.cs</DependentUpon>
+    <EmbeddedResource Include="Abm Afiliado\AltaAfiliado.resx">
+      <DependentUpon>AltaAfiliado.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Abm Afiliado\Modificacion.resx">
-      <DependentUpon>Modificacion.cs</DependentUpon>
+    <EmbeddedResource Include="Abm Afiliado\ConsultaModificacionAfiliado.resx">
+      <DependentUpon>ConsultaModificacionAfiliado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Profesional\ABMProfesional.resx">
+      <DependentUpon>ABMProfesional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Profesional\ConsultaModificacionProfesional.resx">
+      <DependentUpon>ConsultaModificacionProfesional.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login\login.resx">
       <DependentUpon>login.cs</DependentUpon>

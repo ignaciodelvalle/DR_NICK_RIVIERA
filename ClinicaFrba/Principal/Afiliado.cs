@@ -41,7 +41,8 @@ namespace ClinicaFrba.Principal
         //Editar perfil
         private void button4_Click(object sender, EventArgs e)
         {
-            Abm_Afiliado.Modificacion formModificacion = new Abm_Afiliado.Modificacion(this);
+            //cambiar form
+            Abm_Afiliado.ConsultaModificacionAfiliado formModificacion = new Abm_Afiliado.ConsultaModificacionAfiliado(this);
             formModificacion.Show();
             this.Hide();
 

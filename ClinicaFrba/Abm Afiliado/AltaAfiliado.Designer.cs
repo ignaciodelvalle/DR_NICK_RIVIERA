@@ -1,6 +1,6 @@
 ﻿namespace ClinicaFrba.Abm_Afiliado
 {
-    partial class Alta
+    partial class AltaAfiliado
     {
         /// <summary>
         /// Required designer variable.

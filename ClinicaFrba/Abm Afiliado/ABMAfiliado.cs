@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace ClinicaFrba.Abm_Afiliado
 {
-    public partial class ABM : Form
+    public partial class ABMAfiliado : Form
     {
         Login.login login;
-        public ABM()
+        public ABMAfiliado()
         {
           
             InitializeComponent();
@@ -21,7 +21,7 @@ namespace ClinicaFrba.Abm_Afiliado
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Abm_Afiliado.Alta formAlta = new Abm_Afiliado.Alta(this);
+            Abm_Afiliado.AltaAfiliado formAlta = new Abm_Afiliado.AltaAfiliado(this);
             formAlta.Show();
             this.Hide();
 
@@ -30,7 +30,7 @@ namespace ClinicaFrba.Abm_Afiliado
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Abm_Afiliado.Modificacion formModificacion = new Abm_Afiliado.Modificacion(this);
+            Abm_Afiliado.ConsultaModificacionAfiliado formModificacion = new Abm_Afiliado.ConsultaModificacionAfiliado(this);
             formModificacion.Show();
             this.Hide();
 
@@ -39,7 +39,7 @@ namespace ClinicaFrba.Abm_Afiliado
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Abm_Afiliado.Alta formAlta = new Abm_Afiliado.Alta(this);
+            Abm_Afiliado.AltaAfiliado formAlta = new Abm_Afiliado.AltaAfiliado(this);
             formAlta.Show();
             this.Hide();
 
@@ -47,6 +47,11 @@ namespace ClinicaFrba.Abm_Afiliado
         }
 
         private void button4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
         {
 
         }

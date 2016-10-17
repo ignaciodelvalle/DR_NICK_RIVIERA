@@ -1,6 +1,6 @@
 ﻿namespace ClinicaFrba.Abm_Afiliado
 {
-    partial class Modificacion
+    partial class ConsultaModificacionAfiliado
     {
         /// <summary>
         /// Required designer variable.

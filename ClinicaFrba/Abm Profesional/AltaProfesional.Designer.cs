@@ -1,6 +1,6 @@
 ﻿namespace ClinicaFrba.Abm_Profesional
 {
-    partial class Form1
+    partial class AltaProfesional
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.Text = "Alta";
         }
 
         #endregion
