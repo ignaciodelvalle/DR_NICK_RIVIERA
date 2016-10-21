@@ -34,3 +34,23 @@ C:\Users\blue\Documents\GIT\TP GESTION\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\Cli
 C:\Users\blue\Documents\GIT\TP GESTION\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Afiliado.ConsultaModificacionAfiliado.resources
 C:\Users\blue\Documents\GIT\TP GESTION\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Profesional.ABMProfesional.resources
 C:\Users\blue\Documents\GIT\TP GESTION\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Profesional.ConsultaModificacionProfesional.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\bin\Debug\ClinicaFrba.exe.config
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.exe
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.pdb
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.csprojResolveAssemblyReference.cache
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Afiliado.ABMAfiliado.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Afiliado.AltaAfiliado.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Afiliado.ConsultaModificacionAfiliado.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Profesional.ABMProfesional.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Abm_Profesional.ConsultaModificacionProfesional.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Login.login.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Principal.Afiliado.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Properties.Resources.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.csproj.GenerateResource.Cache
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\bin\Debug\ClinicaFrba.exe
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\bin\Debug\ClinicaFrba.pdb
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Principal.Profesional.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.AbmRol.ABMROL.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.AbmRol.NuevoRol.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Compra_Bono.CompraBono.resources
+C:\Users\martin.salerno\Documents\GitHub\DR_NICK_RIVIERA\ClinicaFrba\obj\Debug\ClinicaFrba.Compra_Bono.VerBonos.resources

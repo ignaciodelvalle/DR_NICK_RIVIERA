@@ -12,9 +12,12 @@ namespace ClinicaFrba.Principal
 {
     public partial class Administrativo : Form
     {
-        public Administrativo()
+        Login.login logueo;
+
+        public Administrativo(Login.login logueo)
         {
             InitializeComponent();
+            this.logueo = logueo;
         }
     }
 }

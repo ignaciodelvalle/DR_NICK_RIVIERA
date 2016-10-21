@@ -1,0 +1,244 @@
+--------------------- PASO 1 
+
+CREATE SCHEMA DR_HIBBERT AUTHORIZATION gd 
+
+
+--------------------- PASO 2
+ 
+
+CREATE TABLE DR_HIBBERT.FUNCIONALIDADES (
+	 Id_func INT PRIMARY KEY IDENTITY(1,1) ,
+	 Descripcion_func varchar(100) NOT NULL )
+
+	CREATE TABLE DR_HIBBERT.ROLES (
+	Id_rol INT PRIMARY KEY IDENTITY (1,1),
+	Descripcion_rol varchar(100) NOT NULL )
+
+	CREATE TABLE DR_HIBBERT.ROL_FUNCIONALIDAD (
+	Id_rol INT NOT NULL FOREIGN KEY REFERENCES DR_HIBBERT.ROLES(Id_rol),
+	Id_func INT NOT NULL FOREIGN KEY REFERENCES DR_HIBBERT.FUNCIONALIDADES(Id_func),
+	PRIMARY KEY (Id_rol, Id_func) )
+
+	CREATE TABLE DR_HIBBERT.USUARIOS (
+	Id_usuario varchar(40) PRIMARY KEY,
+	Clave varchar(MAX) NOT NULL,
+	Nombre varchar(80) NOT NULL,
+	Apellido varchar(80) NOT NULL,
+	Documento int NOT NULL,
+	Telefono int NOT NULL,
+	Direccion varchar(200) NOT NULL,
+	Mail varchar(200) NOT NULL,
+	Fecha_nacimiento datetime NOT NULL,
+	Sexo varchar(10) CHECK (Sexo in ('Hombre','Mujer')),
+	Activo BIT DEFAULT 1,
+    Intentos_logueo int NOT NULL DEFAULT 0	)
+
+	CREATE TABLE DR_HIBBERT.AGENDA (
+	Id_agenda int PRIMARY KEY IDENTITY(1,1),
+	Fecha date NOT NULL,
+	Horario time NOT NULL ) 
+
+	CREATE TABLE DR_HIBBERT.TIPO_ESPECIALIDAD (
+	Id_tipo int PRIMARY KEY,
+	Descripcion varchar(100) NOT NULL ) 
+
+	CREATE TABLE DR_HIBBERT.PROFESIONALES ( 
+	Id_profesional varchar(40) PRIMARY KEY FOREIGN KEY REFERENCES DR_HIBBERT.USUARIOS(Id_usuario),
+	Id_agenda int FOREIGN KEY REFERENCES DR_HIBBERT.AGENDA(Id_agenda) NOT NULL,
+	Matricula int ) 
+
+	CREATE TABLE DR_HIBBERT.ESPECIALIDADES (
+	Id_especialidad int PRIMARY KEY,
+	Descripcion varchar(100) NOT NULL,
+	id_tipo int FOREIGN KEY REFERENCES DR_HIBBERT.TIPO_ESPECIALIDAD(Id_tipo) ) 
+
+	CREATE TABLE DR_HIBBERT.ESPECIALIDAD_PROFESIONAL (
+	Id_especialidad int FOREIGN KEY REFERENCES DR_HIBBERT.ESPECIALIDADES(Id_especialidad),
+	Id_profesional varchar(40) FOREIGN KEY REFERENCES DR_HIBBERT.PROFESIONALES(Id_profesional)
+	PRIMARY KEY (Id_especialidad, Id_profesional) ) 
+
+	CREATE TABLE DR_HIBBERT.PLANES ( 
+	Id_plan int PRIMARY KEY,
+	Descripcion varchar(100) NOT NULL,
+	Precio_bono_consulta numeric(12,2) NOT NULL,
+	Precio_bono_farmacia numeric(12,2) NOT NULL )
+
+	CREATE TABLE DR_HIBBERT.TIPO_BONOS (
+	Id_tipo int PRIMARY KEY, 
+	Descripcion varchar(100) NOT NULL )
+
+
+	CREATE TABLE DR_HIBBERT.GRUPOS_FAMILIARES (
+	Id_grupo int PRIMARY KEY IDENTITY(1,1) )
+
+	CREATE TABLE DR_HIBBERT.AFILIADOS (
+	Id_afiliado varchar(40) PRIMARY KEY FOREIGN KEY REFERENCES DR_HIBBERT.USUARIOS(Id_usuario),
+	Id_plan int FOREIGN KEY REFERENCES DR_HIBBERT.PLANES(Id_plan),
+	Id_grupo int FOREIGN KEY REFERENCES DR_HIBBERT.GRUPOS_FAMILIARES(Id_grupo),
+    Estado_civil varchar (40) CHECK (Estado_civil in ('Soltero','Casado','Viudo','Concubinato','Divorciado')),
+	Hijos_cargo int)
+
+	CREATE TABLE DR_HIBBERT.BONOS (
+	Id_bono int PRIMARY KEY, 
+	Id_afiliado varchar(40) FOREIGN KEY REFERENCES DR_HIBBERT.AFILIADOS(Id_afiliado),
+	Id_plan int FOREIGN KEY REFERENCES DR_HIBBERT.PLANES(Id_plan),
+	Id_tipo int FOREIGN KEY REFERENCES DR_HIBBERT.TIPO_BONOS(Id_tipo),
+	Estado varchar(20) NOT NULL CHECK (Estado in ('Pendiente', 'Cancelado', 'Utilizado')) DEFAULT 'Pendiente', 
+	Fecha_compra datetime,
+	Fecha_uso datetime ) 
+
+	CREATE TABLE DR_HIBBERT.TURNOS ( 
+	Numero_turno int PRIMARY KEY, 
+	Id_afiliado varchar(40) FOREIGN KEY REFERENCES DR_HIBBERT.AFILIADOS(Id_afiliado),
+	Id_profesional varchar(40) FOREIGN KEY REFERENCES DR_HIBBERT.PROFESIONALES(Id_profesional),
+	Estado varchar(20) NOT NULL CHECK (Estado in ('Pendiente', 'Cancelado', 'Utilizado')) DEFAULT 'Pendiente',
+	Fecha date NOT NULL,
+	Horario time NOT NULL ) 
+
+	CREATE TABLE DR_HIBBERT.DIAGNOSTICOS (
+	Id_diagnostico int PRIMARY KEY FOREIGN KEY REFERENCES DR_HIBBERT.TURNOS(Numero_turno),
+	Enfermedades  varchar(255) NOT NULL, 
+	Sintomas varchar(255) NOT NULL ) 
+
+	CREATE TABLE DR_HIBBERT.TURNOS_CANCELADOS (
+	Id_cancelacion int PRIMARY KEY IDENTITY(1,1),
+	Numero_turno int NOT NULL FOREIGN KEY REFERENCES DR_HIBBERT.TURNOS(Numero_turno),
+	Motivo varchar(255) NOT NULL, 
+	Responsable varchar(40) NOT NULL CHECK (Responsable in ('Profesional','Afiliado') ) )
+	
+    CREATE TABLE DR_HIBBERT.FRANJAS_ATENCION (
+    Id_profesional varchar(40) FOREIGN KEY REFERENCES DR_HIBBERT.PROFESIONALES(Id_profesional),
+    Dia varchar(10) NOT NULL CHECK (Dia in('LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO')),
+    Horario_Comienzo time NOT NULL,
+    Horario_fin time NOT NULL )
+		
+	CREATE TABLE DR_HIBBERT.ROL_USUARIO (
+    Id_usuario varchar(40) FOREIGN KEY REFERENCES DR_HIBBERT.USUARIOS(ID_USUARIO),
+    Id_rol int FOREIGN KEY REFERENCES DR_HIBBERT.ROLES(id_rol),
+    PRIMARY KEY (Id_usuario,id_rol) )
+	
+
+
+
+--------------------- PASO 3
+
+CREATE TRIGGER DR_HIBBERT.INSERTA_USUARIOS_MIGRACION on DR_HIBBERT.USUARIOS 
+INSTEAD OF INSERT 
+AS BEGIN 
+DECLARE @USERNAME NVARCHAR(255)   
+DECLARE @PASS VARCHAR(MAX)   
+DECLARE @NOMBRE VARCHAR(20)  
+DECLARE @APELLIDO VARCHAR(255)
+DECLARE @DOCUMENTO NVARCHAR(255)   
+DECLARE @TELEFONO VARCHAR(20)   
+DECLARE @DIRECCION VARCHAR(20)  
+DECLARE @MAIL VARCHAR(255)
+DECLARE @FECHA_NACIMIENTO NVARCHAR(255)   
+
+DECLARE CURSOR_ENCRIPTA CURSOR FOR  
+SELECT Id_usuario,clave,nombre,apellido, documento, telefono, direccion, mail, fecha_nacimiento
+FROM inserted
+OPEN CURSOR_ENCRIPTA   
+FeTCH NEXT FROM CURSOR_ENCRIPTA INTO @USERNAME,@PASS,@NOMBRE,@APELLIDO,@DOCUMENTO,@TELEFONO,@DIRECCION,@MAIL,@FECHA_NACIMIENTO 
+WHILE @@FETCH_STATUS = 0   
+BEGIN   
+       INSERT INTO DR_HIBBERT.USUARIOS(Id_usuario,clave,nombre,apellido, documento, telefono, direccion, mail, fecha_nacimiento,Sexo)
+	   VALUES (concat(@USERNAME,'00'),HASHBYTES ('SHA2_256',@PASS),@NOMBRE,@APELLIDO,@DOCUMENTO,@TELEFONO,@DIRECCION,@MAIL,@FECHA_NACIMIENTO,null)
+
+	   IF @USERNAME IN(SELECT PACIENTE_DNI FROM gd_esquema.Maestra)
+	    BEGIN
+	     INSERT DR_HIBBERT.GRUPOS_FAMILIARES DEFAULT VALUES
+	     INSERT INTO DR_HIBBERT.AFILIADOS(Id_afiliado,Id_plan,Id_grupo,Estado_civil,Hijos_cargo)
+	     SELECT top 1 concat(@USERNAME,'00'), plan_med_codigo, @@IDENTITY,null,null from gd_esquema.Maestra
+	     WHERE @username = Paciente_Dni
+		END
+	   ELSE
+	    BEGIN
+	     INSERT INTO DR_HIBBERT.AGENDA 
+		 VALUES ('2000-01-01','00:00:00') 
+		 INSERT INTO DR_HIBBERT.PROFESIONALES 
+		 VALUES (concat(@USERNAME,'00'),@@IDENTITY,null)
+		 INSERT INTO DR_HIBBERT.FRANJAS_ATENCION 
+		 VALUES (concat(@USERNAME,'00'),'LUNES','09:00:00','18:00:00'),
+		        (concat(@USERNAME,'00'),'MARTES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'MIERCOLES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'JUEVES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'VIERNES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'SABADO','13:00:00','18:00:00')
+	     END
+
+       FETCH NEXT FROM CURSOR_ENCRIPTA INTO @USERNAME,@PASS,@NOMBRE,@APELLIDO,@DOCUMENTO,@TELEFONO,@DIRECCION,@MAIL,@FECHA_NACIMIENTO        
+END 
+CLOSE CURSOR_ENCRIPTA
+DEALLOCATE CURSOR_ENCRIPTA
+END 
+
+
+--------------------- PASO 4
+
+
+
+insert into DR_HIBBERT.PLANES (Id_plan, descripcion, precio_bono_consulta, precio_bono_farmacia)
+	 select distinct plan_med_codigo, plan_med_descripcion, Plan_Med_Precio_Bono_Consulta, Plan_Med_Precio_Bono_Farmacia
+	 from gd_esquema.maestra
+
+insert into DR_HIBBERT.TIPO_ESPECIALIDAD (Id_tipo, descripcion)
+	select distinct tipo_especialidad_codigo, tipo_especialidad_descripcion 
+	from gd_esquema.Maestra
+	WHERE Tipo_Especialidad_Codigo IS NOT NULL
+	
+insert into DR_HIBBERT.TIPO_BONOS (Id_tipo, Descripcion)
+     values (1,'Bono Consulta'), (2,'Bono Farmacia')
+	  
+insert into DR_HIBBERT.ESPECIALIDADES (Id_especialidad, Descripcion, Id_TIPO)
+     select  distinct especialidad_codigo, especialidad_descripcion, tipo_especialidad_codigo 
+     from gd_esquema.Maestra
+     where Especialidad_Codigo is not null 
+	 
+INSERT INTO.DR_HIBBERT.USUARIOS(Id_usuario, clave, nombre, apellido, documento, telefono, direccion, mail, fecha_nacimiento)
+     SELECT distinct Paciente_Dni, Paciente_Nombre+Paciente_Apellido as clave, Paciente_Nombre,Paciente_Apellido, Paciente_Dni, Paciente_Telefono,Paciente_Direccion, Paciente_Mail, Paciente_Fecha_Nac
+     FROM gd_esquema.Maestra
+     where paciente_dni is not null
+
+INSERT INTO.DR_HIBBERT.USUARIOS(Id_usuario, clave, nombre, apellido, documento, telefono, direccion, mail, fecha_nacimiento)
+     SELECT  distinct Medico_Dni, Medico_Nombre+Medico_Apellido as clave, Medico_Nombre,Medico_Apellido, Medico_Dni, medico_Telefono,Medico_Direccion, medico_Mail, Medico_Fecha_Nac
+     FROM gd_esquema.Maestra 
+     where medico_dni is not null
+ 
+insert into dr_hibbert.turnos (numero_turno, id_afiliado, id_profesional, estado, fecha, horario)
+     select distinct turno_numero, concat(paciente_dni,'00'),concat(Medico_Dni,'00'),'Utilizado',convert(date,turno_fecha),convert(time,turno_fecha)  from gd_esquema.Maestra
+     where Turno_Numero is not null
+	 
+	 insert into DR_HIBBERT.diagnosticos (id_diagnostico, enfermedades, sintomas)
+select distinct turno_numero,consulta_sintomas, consulta_enfermedades 
+from gd_esquema.Maestra where turno_numero is not null and Consulta_Sintomas is not null
+
+insert into DR_HIBBERT.bonos (Id_bono,Id_afiliado,Id_plan,id_tipo,Estado,Fecha_compra,Fecha_uso)
+select distinct bono_consulta_numero, concat(paciente_dni,'00'), Plan_Med_Codigo,1,'Utilizado', compra_bono_fecha, bono_consulta_fecha_impresion
+ from gd_esquema.Maestra
+ where bono_consulta_numero is not null and Compra_Bono_Fecha is not null
+ order by Bono_Consulta_Numero
+ 
+  insert into dr_hibbert.ESPECIALIDAD_PROFESIONAL
+ select Especialidad_Codigo, concat(medico_dni,'00') from gd_esquema.Maestra
+ where Medico_Dni is not null and Especialidad_Codigo is not null
+ group by medico_dni,especialidad_codigo
+ 
+  insert into DR_HIBBERT.ROLES 
+ VALUES ('Afiliado'), ('Profesional'),('Administrativo')
+
+ insert into DR_HIBBERT.FUNCIONALIDADES
+ VALUES ('Reservar turno'),('Cancelar turno'),('Comprar Bono'),('Alta, baja, modificacion'),('Listados')
+ 
+ INSERT INTO DR_HIBBERT.ROL_FUNCIONALIDAD
+ VALUES (1,1),(1,2),(1,3),(2,2),(3,1),(3,2),(3,3),(3,4),(3,5)
+ 
+ insert into DR_HIBBERT.ROL_USUARIO (Id_usuario,Id_rol)
+ select distinct concat(Medico_Dni,'00'),2 from gd_esquema.Maestra
+ where Medico_Dni is not null
+ 
+ insert into dr_hibbert.ROL_USUARIO (Id_usuario,Id_rol)
+ select distinct concat(Paciente_Dni,'00'),2 from gd_esquema.Maestra
+ where paciente_Dni is not null
+
+

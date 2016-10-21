@@ -42,10 +42,7 @@ namespace ClinicaFrba.Principal
         private void button4_Click(object sender, EventArgs e)
         {
             //cambiar form
-            Abm_Afiliado.ConsultaModificacionAfiliado formModificacion = new Abm_Afiliado.ConsultaModificacionAfiliado(this);
-            formModificacion.Show();
-            this.Hide();
-
+      
         }
         //Desloguearse
         private void button5_Click(object sender, EventArgs e)

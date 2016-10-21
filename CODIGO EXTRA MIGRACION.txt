@@ -1,0 +1,153 @@
+CREATE TRIGGER DR_HIBBERT.INSERTA_USUARIOS_MIGRACION on DR_HIBBERT.USUARIOS 
+INSTEAD OF INSERT 
+AS BEGIN 
+DECLARE @USERNAME NVARCHAR(255)   
+DECLARE @PASS VARCHAR(MAX)   
+DECLARE @NOMBRE VARCHAR(20)  
+DECLARE @APELLIDO VARCHAR(255)
+DECLARE @DOCUMENTO NVARCHAR(255)   
+DECLARE @TELEFONO VARCHAR(20)   
+DECLARE @DIRECCION VARCHAR(20)  
+DECLARE @MAIL VARCHAR(255)
+DECLARE @FECHA_NACIMIENTO NVARCHAR(255)   
+
+DECLARE CURSOR_ENCRIPTA CURSOR FOR  
+SELECT Id_usuario,clave,nombre,apellido, documento, telefono, direccion, mail, fecha_nacimiento
+FROM inserted
+OPEN CURSOR_ENCRIPTA   
+FeTCH NEXT FROM CURSOR_ENCRIPTA INTO @USERNAME,@PASS,@NOMBRE,@APELLIDO,@DOCUMENTO,@TELEFONO,@DIRECCION,@MAIL,@FECHA_NACIMIENTO 
+WHILE @@FETCH_STATUS = 0   
+BEGIN   
+       INSERT INTO DR_HIBBERT.USUARIOS(Id_usuario,clave,nombre,apellido, documento, telefono, direccion, mail, fecha_nacimiento,Sexo)
+	   VALUES (concat(@USERNAME,'00'),HASHBYTES ('SHA2_256',@PASS),@NOMBRE,@APELLIDO,@DOCUMENTO,@TELEFONO,@DIRECCION,@MAIL,@FECHA_NACIMIENTO,null)
+
+	   IF @USERNAME IN(SELECT PACIENTE_DNI FROM gd_esquema.Maestra)
+	    BEGIN
+	     INSERT DR_HIBBERT.GRUPOS_FAMILIARES DEFAULT VALUES
+	     INSERT INTO DR_HIBBERT.AFILIADOS(Id_afiliado,Id_plan,Id_grupo,Estado_civil,Hijos_cargo)
+	     SELECT top 1 concat(@USERNAME,'00'), plan_med_codigo, @@IDENTITY,null,null from gd_esquema.Maestra
+	     WHERE @username = Paciente_Dni
+		END
+	   ELSE
+	    BEGIN
+	     INSERT INTO DR_HIBBERT.AGENDA 
+		 VALUES ('2000-01-01','00:00:00') 
+		 INSERT INTO DR_HIBBERT.PROFESIONALES 
+		 VALUES (concat(@USERNAME,'00'),@@IDENTITY,null)
+		 INSERT INTO DR_HIBBERT.FRANJAS_ATENCION 
+		 VALUES (concat(@USERNAME,'00'),'LUNES','09:00:00','18:00:00'),
+		        (concat(@USERNAME,'00'),'MARTES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'MIERCOLES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'JUEVES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'VIERNES','09:00:00','18:00:00'),
+			    (concat(@USERNAME,'00'),'SABADO','13:00:00','18:00:00')
+	     END
+
+       FETCH NEXT FROM CURSOR_ENCRIPTA INTO @USERNAME,@PASS,@NOMBRE,@APELLIDO,@DOCUMENTO,@TELEFONO,@DIRECCION,@MAIL,@FECHA_NACIMIENTO        
+END 
+CLOSE CURSOR_ENCRIPTA
+DEALLOCATE CURSOR_ENCRIPTA
+END 
+
+
+
+
+
+CREATE PROCEDURE [DR_HIBBERT].[LOGUEO]
+@usuario varchar(20),
+@clave varchar(30),
+@resultado int OUTPUT 
+AS BEGIN
+
+IF (select Activo from DR_HIBBERT.USUARIOS where Id_usuario = @usuario) = 0
+  BEGIN
+   SET @resultado = 2
+   RETURN
+  END
+END
+
+IF @usuario in (SELECT Id_usuario FROM DR_HIBBERT.USUARIOS
+WHERE Id_usuario = @usuario AND clave = HASHBYTES('SHA2_256',@clave))
+ BEGIN 
+  UPDATE DR_HIBBERT.USUARIOS
+  SET Intentos_logueo = 0
+  WHERE Id_usuario = @usuario
+  SET @resultado = 1 
+  RETURN
+ END
+ ELSE
+  BEGIN
+   UPDATE DR_HIBBERT.USUARIOS 
+   SET Intentos_logueo = Intentos_logueo + 1
+   WHERE Id_usuario = @usuario
+   IF (SELECT INTENTOS_LOGUEO FROM DR_HIBBERT.USUARIOS WHERE Id_usuario = @usuario) > 2
+   BEGIN
+    SET @resultado = 2
+	UPDATE DR_HIBBERT.USUARIOS
+	SET Activo = 0 
+	WHERE Id_usuario = @usuario
+    RETURN
+   END
+   ELSE
+   BEGIN
+   SET @resultado = 0
+   RETURN
+   END
+ END 
+
+
+CREATE trigger [DR_HIBBERT].[AGREGA_GRUPO_FAMILIAR] on [DR_HIBBERT].[AFILIADOS]
+INSTEAD OF INSERT
+AS BEGIN
+ IF (SELECT id_grupo FROM INSERTED) IS NULL
+ BEGIN
+ INSERT INTO DR_HIBBERT.AFILIADOS (id_afiliado,Id_plan,Estado_civil,Hijos_cargo)
+ select Id_afiliado, Id_plan,Estado_civil,Hijos_cargo 
+ from inserted
+ INSERT INTO DR_HIBBERT.GRUPOS_FAMILIARES DEFAULT VALUES
+ UPDATE DR_HIBBERT.AFILIADOS
+ SET Id_grupo = @@IDENTITY
+ where Id_afiliado = (select Id_afiliado from inserted)
+ END
+ ELSE
+ BEGIN
+ INSERT INTO DR_HIBBERT.AFILIADOS (id_afiliado,Id_plan,Id_grupo,Estado_civil,Hijos_cargo)
+ select Id_afiliado, Id_plan,Id_grupo, Estado_civil,Hijos_cargo 
+ from inserted
+ END
+END
+
+
+
+CREATE TABLE DR_HIBBERT.COMPRAS_BONOS(
+Id_compra int primary key identity,
+Id_afiliado varchar(40) not null foreign key references dr_hibbert.afiliados(id_afiliado),
+Cantidad int not null,
+total int not null)
+
+
+CREATE trigger [DR_HIBBERT].[INSERTA_USUARIO] on [DR_HIBBERT].[USUARIOS]
+INSTEAD OF INSERT
+AS BEGIN
+ INSERT INTO DR_HIBBERT.USUARIOS(Id_usuario,clave,nombre,apellido, documento, telefono, direccion, mail, fecha_nacimiento,Sexo)
+ select Id_usuario,HASHBYTES('SHA2_256',CONCAT(nombre,apellido)),nombre,apellido, documento, telefono, direccion, mail, fecha_nacimiento,Sexo 
+ from inserted
+END
+
+
+alter table dr_hibbert.bonos 
+add Numero_consulta int null
+
+alter table dr_hibbert.bonos
+add id_especialidad int foreign key references dr_hibbert.especialidades(id_especialidad) not null
+
+tambien id_grupo familiar 
+tambien id_afiliado que lo utlilizo
+
+CREATE trigger [DR_HIBBERT].[AGREGA_IDBONO] ON [DR_HIBBERT].[BONOS]
+INSTEAD OF INSERT 
+AS BEGIN
+ INSERT INTO DR_HIBBERT.bonos (Id_bono,Id_afiliado,id_plan,Id_tipo,Estado,Fecha_compra,Fecha_uso,numero_consulta,id_afiliado_uso_bono,id_grupo,id_especialidad)
+ select (select max(id_bono) +1 from DR_HIBBERT.BONOS),id_afiliado,Id_plan,Id_tipo,Estado,Fecha_compra,Fecha_uso,numero_consulta,id_afiliado_uso_bono,id_grupo,id_especialidad
+ from inserted
+END
